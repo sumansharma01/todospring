@@ -28,4 +28,9 @@ public class JwtProvider {
                 .signWith(key)
                 .compact();
     }
+
+    public boolean validateToken(String jwt) {
+        Jwts.parser().setSigningKey(key).parseClaimsJws(jwt);
+        return true;
+    }
 }

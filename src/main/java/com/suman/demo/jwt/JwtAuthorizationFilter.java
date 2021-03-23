@@ -1,5 +1,6 @@
 package com.suman.demo.jwt;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -10,9 +11,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
+
+    @Autowired
+    private JwtProvider jwtProvider;
+
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        String bearer=getJwtFromHeader(httpServletRequest);
+        String jwt=getJwtFromHeader(httpServletRequest);
+        if(StringUtils.hasText(jwt)&& jwtProvider.validateToken(jwt)){
+
+        }
     }
 
     private String getJwtFromHeader(HttpServletRequest httpServletRequest) {
