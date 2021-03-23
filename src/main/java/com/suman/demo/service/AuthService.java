@@ -3,6 +3,7 @@ package com.suman.demo.service;
 import com.suman.demo.dto.LoginRequest;
 import com.suman.demo.dto.RegisterRequest;
 import com.suman.demo.entity.UserEntity;
+import com.suman.demo.jwt.JwtProvider;
 import com.suman.demo.repository.AuthRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +26,9 @@ public class AuthService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private JwtProvider jwtProvider;
+
     public void registerUser(RegisterRequest registerRequest){
         UserEntity userEntity=new UserEntity();
         userEntity.setUserName(registerRequest.getUserName());
@@ -34,8 +38,10 @@ public class AuthService {
         authRepository.save(userEntity);
     }
 
-    public void login(LoginRequest loginRequest) {
+    public String login(LoginRequest loginRequest) {
         Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUserName(),loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwtToken=jwtProvider.generateToken(authentication);
+        return jwtToken;
     }
 }

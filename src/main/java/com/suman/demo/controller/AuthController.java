@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/todo/")
+@RequestMapping("/api/todo/auth")
 public class AuthController {
 
     @Autowired
@@ -26,7 +26,9 @@ public class AuthController {
 
     @PostMapping("login")
     public ResponseEntity login(@RequestBody LoginRequest loginRequest){
-        authService.login(loginRequest);
-        return new ResponseEntity(HttpStatus.OK);
+        String jwtToken=authService.login(loginRequest);
+        return new ResponseEntity(jwtToken,HttpStatus.OK);
     }
+
+
 }
